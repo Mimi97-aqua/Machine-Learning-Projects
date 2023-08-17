@@ -1,0 +1,351 @@
+>>> import turicreate as tc
+>>> #Load dataset
+... df = tc.SFrame('diabetes_data_upload.csv')
+Finished parsing file /home/ebenye/test/diabetes_data_upload.csv
+Parsing completed. Parsed 100 lines in 0.022514 secs.
+------------------------------------------------------
+Inferred types from first 100 line(s) of file as
+column_type_hints=[int,str,str,str,str,str,str,str,str,str,str,str,str,str,str,str,str]
+If parsing fails due to incorrect types, you can correct
+the inferred type list above and pass it to read_csv in
+the column_type_hints argument
+------------------------------------------------------
+Finished parsing file /home/ebenye/test/diabetes_data_upload.csv
+Parsing completed. Parsed 520 lines in 0.011263 secs.
+>>> # Show dataset
+... df.head()
+Columns:
+        Age     int
+        Gender  str
+        Polyuria        str
+        Polydipsia      str
+        sudden weight loss      str
+        weakness        str
+        Polyphagia      str
+        Genital thrush  str
+        visual blurring str
+        Itching str
+        Irritability    str
+        delayed healing str
+        partial paresis str
+        muscle stiffness        str
+        Alopecia        str
+        Obesity str
+        class   str
+
+Rows: 10
+
+Data:
++-----+--------+----------+------------+--------------------+----------+------------+
+| Age | Gender | Polyuria | Polydipsia | sudden weight loss | weakness | Polyphagia |
++-----+--------+----------+------------+--------------------+----------+------------+
+|  40 |  Male  |    No    |    Yes     |         No         |   Yes    |     No     |
+|  58 |  Male  |    No    |     No     |         No         |   Yes    |     No     |
+|  41 |  Male  |   Yes    |     No     |         No         |   Yes    |    Yes     |
+|  45 |  Male  |    No    |     No     |        Yes         |   Yes    |    Yes     |
+|  60 |  Male  |   Yes    |    Yes     |        Yes         |   Yes    |    Yes     |
+|  55 |  Male  |   Yes    |    Yes     |         No         |   Yes    |    Yes     |
+|  57 |  Male  |   Yes    |    Yes     |         No         |   Yes    |    Yes     |
+|  66 |  Male  |   Yes    |    Yes     |        Yes         |   Yes    |     No     |
+|  67 |  Male  |   Yes    |    Yes     |         No         |   Yes    |    Yes     |
+|  70 |  Male  |    No    |    Yes     |        Yes         |   Yes    |    Yes     |
++-----+--------+----------+------------+--------------------+----------+------------+
++----------------+-----------------+---------+--------------+-----------------+
+| Genital thrush | visual blurring | Itching | Irritability | delayed healing |
++----------------+-----------------+---------+--------------+-----------------+
+|       No       |        No       |   Yes   |      No      |       Yes       |
+|       No       |       Yes       |    No   |      No      |        No       |
+|       No       |        No       |   Yes   |      No      |       Yes       |
+|      Yes       |        No       |   Yes   |      No      |       Yes       |
+|       No       |       Yes       |   Yes   |     Yes      |       Yes       |
+|       No       |       Yes       |   Yes   |      No      |       Yes       |
+|      Yes       |        No       |    No   |      No      |       Yes       |
+|       No       |       Yes       |   Yes   |     Yes      |        No       |
+|      Yes       |        No       |   Yes   |     Yes      |        No       |
+|       No       |       Yes       |   Yes   |     Yes      |        No       |
++----------------+-----------------+---------+--------------+-----------------+
++-----------------+------------------+----------+---------+----------+
+| partial paresis | muscle stiffness | Alopecia | Obesity |  class   |
++-----------------+------------------+----------+---------+----------+
+|        No       |       Yes        |   Yes    |   Yes   | Positive |
+|       Yes       |        No        |   Yes    |    No   | Positive |
+|        No       |       Yes        |   Yes    |    No   | Positive |
+|        No       |        No        |    No    |    No   | Positive |
+|       Yes       |       Yes        |   Yes    |   Yes   | Positive |
+|        No       |       Yes        |   Yes    |   Yes   | Positive |
+|       Yes       |        No        |    No    |    No   | Positive |
+|       Yes       |       Yes        |    No    |    No   | Positive |
+|       Yes       |       Yes        |    No    |   Yes   | Positive |
+|        No       |        No        |   Yes    |    No   | Positive |
++-----------------+------------------+----------+---------+----------+
+[10 rows x 17 columns]
+
+>>> # Check column data types
+... df.dtype
+[<class 'int'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>, <class 'str'>]
+>>> # Plot value count of Class Distribution
+... df['class'].show()
+Materializing SArray
+>>> /home/ebenye/test/venv/lib/python3.6/site-packages/turicreate/Turi Create Visualization/visualization_client: error while loading shared libraries: libnss3.so: cannot open shared object file: No such file or directory
+
+KeyboardInterrupt
+>>> # Features
+... df.column_names()
+['Age', 'Gender', 'Polyuria', 'Polydipsia', 'sudden weight loss', 'weakness', 'Polyphagia', 'Genital thrush', 'visual blurring', 'Itching', 'Irritability', 'delayed healing', 'partial paresis', 'muscle stiffness', 'Alopecia', 'Obesity', 'class']
+>>> feature_names = ['Age', 'Gender', 'Polyuria', 'Polydipsia', 'sudden weight loss', 'weakness', 'Polyphagia', 'Genital thrush', 'visual blurring', 'Itching', 'Irritability', 'delayed healing', 'partial paresis', 'muscle stiffness', 'Alopecia', 'Obesity']
+>>> # Split dataset
+... train_data, test_data = df.random_split(0.7)
+>>> train_data.shape
+(370, 17)
+>>> df.shape
+(520, 17)
+>>> # Build model = Linear regression
+... lr_model = tc.logistic_classifier.create(train_data,target='class',features=feature_names)
+PROGRESS: Creating a validation set from 5 percent of training data. This may take a while.
+          You can set ``validation_set=None`` to disable validation tracking.
+
+Logistic regression:
+--------------------------------------------------------
+Number of examples          : 351
+Number of classes           : 2
+Number of feature columns   : 16
+Number of unpacked features : 16
+Number of coefficients      : 17
+Starting Newton Method
+--------------------------------------------------------
++-----------+----------+--------------+-------------------+---------------------+
+| Iteration | Passes   | Elapsed Time | Training Accuracy | Validation Accuracy |
++-----------+----------+--------------+-------------------+---------------------+
+| 1         | 2        | 1.083947     | 0.900285          | 0.947368            |
+| 2         | 3        | 1.087661     | 0.920228          | 0.947368            |
+| 3         | 4        | 1.090594     | 0.928775          | 0.947368            |
+| 4         | 5        | 1.096221     | 0.931624          | 0.947368            |
+| 5         | 6        | 1.099822     | 0.934473          | 0.947368            |
+| 7         | 8        | 1.103960     | 0.934473          | 0.947368            |
++-----------+----------+--------------+-------------------+---------------------+
+SUCCESS: Optimal solution found.
+
+>>> # Model evaluation
+... lr_model.summary
+<bound method Model.summary of Class                          : LogisticClassifier
+
+Schema
+------
+Number of coefficients         : 17
+Number of examples             : 351
+Number of classes              : 2
+Number of feature columns      : 16
+Number of unpacked features    : 16
+
+Hyperparameters
+---------------
+L1 penalty                     : 0.0
+L2 penalty                     : 0.01
+
+Training Summary
+----------------
+Solver                         : newton
+Solver iterations              : 7
+Solver status                  : SUCCESS: Optimal solution found.
+Training time (sec)            : 1.1052
+
+Settings
+--------
+Log-likelihood                 : 63.5999
+
+Highest Positive Coefficients
+-----------------------------
+Polyuria[Yes]                  : 4.5913
+Gender[Female]                 : 3.848
+Itching[No]                    : 2.2472
+Genital thrush[Yes]            : 1.9389
+partial paresis[Yes]           : 1.6593
+
+Lowest Negative Coefficients
+----------------------------
+Polydipsia[No]                 : -4.7828
+weakness[No]                   : -1.1769
+sudden weight loss[Yes]        : -0.2361
+Alopecia[No]                   : -0.1625
+Age                            : -0.0401
+>
+>>> # Evaluating the model
+... metrics = lr_model.evaluate(test_data)
+>>> metrics
+{'accuracy': 0.9266666666666666, 'auc': 0.9868326118326121, 'confusion_matrix': Columns:
+        target_label    str
+        predicted_label str
+        count   int
+
+Rows: 4
+
+Data:
++--------------+-----------------+-------+
+| target_label | predicted_label | count |
++--------------+-----------------+-------+
+|   Positive   |     Negative    |   4   |
+|   Positive   |     Positive    |   80  |
+|   Negative   |     Negative    |   59  |
+|   Negative   |     Positive    |   7   |
++--------------+-----------------+-------+
+[4 rows x 3 columns]
+, 'f1_score': 0.935672514619883, 'log_loss': 0.16236686321384586, 'precision': 0.9195402298850575, 'recall': 0.9523809523809523, 'roc_curve': Columns:
+        threshold       float
+        fpr     float
+        tpr     float
+        p       int
+        n       int
+
+Rows: 1001
+
+Data:
++-----------+--------------------+-----+----+----+
+| threshold |        fpr         | tpr | p  | n  |
++-----------+--------------------+-----+----+----+
+|    0.0    |        1.0         | 1.0 | 84 | 66 |
+|   0.001   |        1.0         | 1.0 | 84 | 66 |
+|   0.002   | 0.9848484848484849 | 1.0 | 84 | 66 |
+|   0.003   | 0.9848484848484849 | 1.0 | 84 | 66 |
+|   0.004   | 0.9393939393939394 | 1.0 | 84 | 66 |
+|   0.005   | 0.9393939393939394 | 1.0 | 84 | 66 |
+|   0.006   | 0.9393939393939394 | 1.0 | 84 | 66 |
+|   0.007   | 0.9090909090909091 | 1.0 | 84 | 66 |
+|   0.008   | 0.8333333333333334 | 1.0 | 84 | 66 |
+|   0.009   | 0.8333333333333334 | 1.0 | 84 | 66 |
++-----------+--------------------+-----+----+----+
+[1001 rows x 5 columns]
+Note: Only the head of the SFrame is printed.
+You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns.}
+>>> type(metrics)
+<class 'dict'>
+>>> # Getting accuracy
+... metrics['accuracy']
+0.9266666666666666
+>>> # Making prediction
+... test_data
+Columns:
+        Age     int
+        Gender  str
+        Polyuria        str
+        Polydipsia      str
+        sudden weight loss      str
+        weakness        str
+        Polyphagia      str
+        Genital thrush  str
+        visual blurring str
+        Itching str
+        Irritability    str
+        delayed healing str
+        partial paresis str
+        muscle stiffness        str
+        Alopecia        str
+        Obesity str
+        class   str
+
+Rows: 150
+
+Data:
++-----+--------+----------+------------+--------------------+----------+------------+
+| Age | Gender | Polyuria | Polydipsia | sudden weight loss | weakness | Polyphagia |
++-----+--------+----------+------------+--------------------+----------+------------+
+|  60 |  Male  |   Yes    |    Yes     |        Yes         |   Yes    |    Yes     |
+|  61 |  Male  |   Yes    |    Yes     |        Yes         |   Yes    |    Yes     |
+|  42 |  Male  |    No    |     No     |         No         |   Yes    |    Yes     |
+|  52 |  Male  |   Yes    |    Yes     |        Yes         |   Yes    |    Yes     |
+|  38 |  Male  |    No    |    Yes     |         No         |    No    |     No     |
+|  41 |  Male  |   Yes    |    Yes     |        Yes         |   Yes    |    Yes     |
+|  60 |  Male  |   Yes    |     No     |         No         |    No    |     No     |
+|  30 | Female |   Yes    |     No     |        Yes         |   Yes    |    Yes     |
+|  35 | Female |   Yes    |    Yes     |        Yes         |   Yes    |    Yes     |
+|  48 | Female |    No    |     No     |        Yes         |   Yes    |     No     |
++-----+--------+----------+------------+--------------------+----------+------------+
++----------------+-----------------+---------+--------------+-----------------+
+| Genital thrush | visual blurring | Itching | Irritability | delayed healing |
++----------------+-----------------+---------+--------------+-----------------+
+|       No       |       Yes       |   Yes   |     Yes      |       Yes       |
+|      Yes       |       Yes       |   Yes   |      No      |        No       |
+|       No       |        No       |    No   |     Yes      |        No       |
+|       No       |       Yes       |   Yes   |      No      |       Yes       |
+|      Yes       |        No       |    No   |      No      |        No       |
+|      Yes       |       Yes       |   Yes   |     Yes      |        No       |
+|       No       |       Yes       |    No   |      No      |        No       |
+|       No       |        No       |    No   |      No      |       Yes       |
+|       No       |        No       |   Yes   |      No      |       Yes       |
+|       No       |       Yes       |   Yes   |      No      |       Yes       |
++----------------+-----------------+---------+--------------+-----------------+
++-----------------+------------------+----------+---------+----------+
+| partial paresis | muscle stiffness | Alopecia | Obesity |  class   |
++-----------------+------------------+----------+---------+----------+
+|       Yes       |       Yes        |   Yes    |   Yes   | Positive |
+|        No       |        No        |   Yes    |   Yes   | Positive |
+|        No       |       Yes        |    No    |    No   | Positive |
+|       Yes       |       Yes        |    No    |    No   | Positive |
+|        No       |        No        |   Yes    |    No   | Positive |
+|        No       |        No        |    No    |   Yes   | Positive |
+|       Yes       |        No        |   Yes    |    No   | Positive |
+|        No       |        No        |    No    |    No   | Positive |
+|       Yes       |       Yes        |    No    |    No   | Positive |
+|       Yes       |        No        |    No    |    No   | Positive |
++-----------------+------------------+----------+---------+----------+
+[150 rows x 17 columns]
+Note: Only the head of the SFrame is printed.
+You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns.
+>>> d = {'Age': 41,
+'Alopec...  'Alopecia': 'Yes',
+...  'Gender': 'Male',
+enital t...  'Genital thrush': 'No',
+ 'Irrit...  'Irritability': 'No',
+...  'Itching': 'Yes',
+...  'Obesity': 'No',
+...  'Polydipsia': 'No',
+...  'Polyphagia': 'Yes',
+...  'Polyuria': 'Yes',
+...  'class': 'Positive',
+...  'delayed healing': 'Yes',
+...  'muscle stiffness': 'Yes',
+...  'partial paresis': 'No',
+...  'sudden weight loss': 'No',
+...  'visual blurring': 'No',
+...  'weakness': 'Yes'}
+>>> ex1 = tc.SFrame({'data': [d.values()]})
+>>> ex1
+Columns:
+        data    list
+
+Rows: 1
+
+Data:
++-------------------------------+
+|              data             |
++-------------------------------+
+| [41, Yes, Male, No, No, Ye... |
++-------------------------------+
+[1 rows x 1 columns]
+
+>>> lr_model.predict(ex1)
+dtype: str
+Rows: 1
+['Negative']
+>>> # Prediction Probability
+... lr_,odel.classify(ex1)
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+NameError: name 'lr_' is not defined
+>>> lr_model.classify(ex1)
+Columns:
+        class   str
+        probability     float
+
+Rows: 1
+
+Data:
++----------+--------------------+
+|  class   |    probability     |
++----------+--------------------+
+| Negative | 0.7383658115799877 |
++----------+--------------------+
+[1 rows x 2 columns]
+
+>>> #Save model
+... lr_model.save('diabetes_prediction_risk_classifier.model')
+>>>

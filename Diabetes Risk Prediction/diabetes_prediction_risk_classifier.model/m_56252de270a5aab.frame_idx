@@ -1,0 +1,41 @@
+[sframe]
+version=0
+num_segments=0
+num_columns=17
+nrows=19
+[column_names]
+0000=Age
+0001=Gender
+0002=Polyuria
+0003=Polydipsia
+0004=sudden weight loss
+0005=weakness
+0006=Polyphagia
+0007=Genital thrush
+0008=visual blurring
+0009=Itching
+0010=Irritability
+0011=delayed healing
+0012=partial paresis
+0013=muscle stiffness
+0014=Alopecia
+0015=Obesity
+0016=class
+[column_files]
+0000=m_56252de270a5aab.sidx:0
+0001=m_56252de270a5aab.sidx:1
+0002=m_56252de270a5aab.sidx:2
+0003=m_56252de270a5aab.sidx:3
+0004=m_56252de270a5aab.sidx:4
+0005=m_56252de270a5aab.sidx:5
+0006=m_56252de270a5aab.sidx:6
+0007=m_56252de270a5aab.sidx:7
+0008=m_56252de270a5aab.sidx:8
+0009=m_56252de270a5aab.sidx:9
+0010=m_56252de270a5aab.sidx:10
+0011=m_56252de270a5aab.sidx:11
+0012=m_56252de270a5aab.sidx:12
+0013=m_56252de270a5aab.sidx:13
+0014=m_56252de270a5aab.sidx:14
+0015=m_56252de270a5aab.sidx:15
+0016=m_56252de270a5aab.sidx:16
