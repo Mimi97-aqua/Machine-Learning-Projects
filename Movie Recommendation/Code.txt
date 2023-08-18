@@ -1,0 +1,244 @@
+(venv) ebenye@DESKTOP-NBRUH36:~/test/rs_1$ python
+Python 3.6.9 (default, Mar 10 2023, 16:46:00) 
+[GCC 8.4.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+
+## Here I loaded the and merged the datasets I was to use using pandas
+>>> #Merging data
+... import pandas as pd 
+>>> movies = pd.read_csv('ds/movie.csv')
+>>> movies
+       movieId                               title                                       genres
+0            1                    Toy Story (1995)  Adventure|Animation|Children|Comedy|Fantasy
+1            2                      Jumanji (1995)                   Adventure|Children|Fantasy
+2            3             Grumpier Old Men (1995)                               Comedy|Romance
+3            4            Waiting to Exhale (1995)                         Comedy|Drama|Romance
+4            5  Father of the Bride Part II (1995)                                       Comedy
+...        ...                                 ...                                          ...
+27273   131254        Kein Bund für's Leben (2007)                                       Comedy
+27274   131256       Feuer, Eis & Dosenbier (2002)                                       Comedy
+27275   131258                  The Pirates (2014)                                    Adventure
+27276   131260                 Rentun Ruusu (2001)                           (no genres listed)
+27277   131262                    Innocence (2014)                     Adventure|Fantasy|Horror
+
+[27278 rows x 3 columns]
+
+>>> ratings = pd.read_csv('ds/rating.csv')
+>>> ratings
+          userId  movieId  rating            timestamp
+0              1        2     3.5  2005-04-02 23:53:47
+20000259  138493    69526     4.5  2009-12-03 18:31:48
+20000260  138493    69644     3.0  2009-12-07 18:10:57
+20000261  138493    70286     5.0  2009-11-13 15:42:24
+20000262  138493    71619     2.5  2009-10-17 20:25:36
+
+[20000263 rows x 4 columns]
+>>> full_data = ratings.merge(movies, how='left', on='movieId')
+>>> full_data
+          userId  movieId  ...                                              title                                             genres
+0              1        2  ...                                     Jumanji (1995)                         Adventure|Children|Fantasy
+1              1       29  ...  City of Lost Children, The (Cité des enfants p...             Adventure|Drama|Fantasy|Mystery|Sci-Fi
+2              1       32  ...          Twelve Monkeys (a.k.a. 12 Monkeys) (1995)                            Mystery|Sci-Fi|Thriller
+3              1       47  ...                        Seven (a.k.a. Se7en) (1995)                                   Mystery|Thriller
+4              1       50  ...                         Usual Suspects, The (1995)                             Crime|Mystery|Thriller
+...          ...      ...  ...                                                ...                                                ...
+20000258  138493    68954  ...                                          Up (2009)                 Adventure|Animation|Children|Drama
+20000259  138493    69526  ...         Transformers: Revenge of the Fallen (2009)                       Action|Adventure|Sci-Fi|IMAX
+20000260  138493    69644  ...              Ice Age: Dawn of the Dinosaurs (2009)  Action|Adventure|Animation|Children|Comedy|Rom...
+20000261  138493    70286  ...                                  District 9 (2009)                            Mystery|Sci-Fi|Thriller
+20000262  138493    71619  ...      Coco Before Chanel (Coco avant Chanel) (2009)                                              Drama
+
+[20000263 rows x 6 columns]
+>>> full_data.to_csv('ds/clean_ratings.csv')
+>>> full_data
+          userId  movieId  ...                                              title                                             genres
+0              1        2  ...                                     Jumanji (1995)                         Adventure|Children|Fantasy
+1              1       29  ...  City of Lost Children, The (Cité des enfants p...             Adventure|Drama|Fantasy|Mystery|Sci-Fi
+2              1       32  ...          Twelve Monkeys (a.k.a. 12 Monkeys) (1995)                            Mystery|Sci-Fi|Thriller
+3              1       47  ...                        Seven (a.k.a. Se7en) (1995)                                   Mystery|Thriller
+4              1       50  ...                         Usual Suspects, The (1995)                             Crime|Mystery|Thriller
+...          ...      ...  ...                                                ...                                                ...
+20000258  138493    68954  ...                                          Up (2009)                 Adventure|Animation|Children|Drama
+20000259  138493    69526  ...         Transformers: Revenge of the Fallen (2009)                       Action|Adventure|Sci-Fi|IMAX
+20000260  138493    69644  ...              Ice Age: Dawn of the Dinosaurs (2009)  Action|Adventure|Animation|Children|Comedy|Rom...
+20000261  138493    70286  ...                                  District 9 (2009)                            Mystery|Sci-Fi|Thriller
+20000262  138493    71619  ...      Coco Before Chanel (Coco avant Chanel) (2009)                                              Drama
+
+[20000263 rows x 6 columns]
+>>> import turicreate as tc
+>>> data = tc.SFrame.read_csv('ds/clean_ratings.csv')
+Finished parsing file /home/ebenye/test/rs_1/ds/clean_ratings.csv
+Parsing completed. Parsed 100 lines in 1.2174 secs.
+------------------------------------------------------
+Inferred types from first 100 line(s) of file as
+column_type_hints=[int,int,int,float,str,str,str]
+If parsing fails due to incorrect types, you can correct
+the inferred type list above and pass it to read_csv in
+the column_type_hints argument
+------------------------------------------------------
+Read 606049 lines. Lines per second: 499057
+Read 10629774 lines. Lines per second: 1.63042e+06
+Read 18164257 lines. Lines per second: 1.53213e+06
+Finished parsing file /home/ebenye/test/rs_1/ds/clean_ratings.csv
+Parsing completed. Parsed 20000263 lines in 13.224 secs.
+>>> data
+Columns:
+        X1      int
+        userId  int
+        movieId int
+        rating  float
+        timestamp       str
+        title   str
+        genres  str
+
+Rows: 20000263
+
+Data:
++----+--------+---------+--------+---------------------+
+| X1 | userId | movieId | rating |      timestamp      |
++----+--------+---------+--------+---------------------+
+| 0  |   1    |    2    |  3.5   | 2005-04-02 23:53:47 |
+| 1  |   1    |    29   |  3.5   | 2005-04-02 23:31:16 |
+| 2  |   1    |    32   |  3.5   | 2005-04-02 23:33:39 |
+| 3  |   1    |    47   |  3.5   | 2005-04-02 23:32:07 |
+| 4  |   1    |    50   |  3.5   | 2005-04-02 23:29:40 |
+| 5  |   1    |   112   |  3.5   | 2004-09-10 03:09:00 |
+| 6  |   1    |   151   |  4.0   | 2004-09-10 03:08:54 |
+| 7  |   1    |   223   |  4.0   | 2005-04-02 23:46:13 |
+| 8  |   1    |   253   |  4.0   | 2005-04-02 23:35:40 |
+| 9  |   1    |   260   |  4.0   | 2005-04-02 23:33:46 |
++----+--------+---------+--------+---------------------+
++-------------------------------+-------------------------------+
+|             title             |             genres            |
++-------------------------------+-------------------------------+
+|         Jumanji (1995)        |   Adventure|Children|Fantasy  |
+| City of Lost Children, The... | Adventure|Drama|Fantasy|My... |
+| Twelve Monkeys (a.k.a. 12 ... |    Mystery|Sci-Fi|Thriller    |
+|  Seven (a.k.a. Se7en) (1995)  |        Mystery|Thriller       |
+|   Usual Suspects, The (1995)  |     Crime|Mystery|Thriller    |
+| Rumble in the Bronx (Hont ... | Action|Adventure|Comedy|Crime |
+|         Rob Roy (1995)        |    Action|Drama|Romance|War   |
+|         Clerks (1994)         |             Comedy            |
+| Interview with the Vampire... |          Drama|Horror         |
+| Star Wars: Episode IV - A ... |    Action|Adventure|Sci-Fi    |
++-------------------------------+-------------------------------+
+[20000263 rows x 7 columns]
+Note: Only the head of the SFrame is printed.
+You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns.
+>>> data.head()
+Columns:
+        X1      int
+        userId  int
+        movieId int
+        rating  float
+        timestamp       str
+        title   str
+        genres  str
+
+Rows: 10
+
+Data:
++----+--------+---------+--------+---------------------+
+| X1 | userId | movieId | rating |      timestamp      |
++----+--------+---------+--------+---------------------+
+| 0  |   1    |    2    |  3.5   | 2005-04-02 23:53:47 |
+| 1  |   1    |    29   |  3.5   | 2005-04-02 23:31:16 |
+| 2  |   1    |    32   |  3.5   | 2005-04-02 23:33:39 |
+| 3  |   1    |    47   |  3.5   | 2005-04-02 23:32:07 |
+| 4  |   1    |    50   |  3.5   | 2005-04-02 23:29:40 |
+| 5  |   1    |   112   |  3.5   | 2004-09-10 03:09:00 |
+| 6  |   1    |   151   |  4.0   | 2004-09-10 03:08:54 |
+| 7  |   1    |   223   |  4.0   | 2005-04-02 23:46:13 |
+| 8  |   1    |   253   |  4.0   | 2005-04-02 23:35:40 |
+| 9  |   1    |   260   |  4.0   | 2005-04-02 23:33:46 |
++----+--------+---------+--------+---------------------+
++-------------------------------+-------------------------------+
+|             title             |             genres            |
++-------------------------------+-------------------------------+
+|         Jumanji (1995)        |   Adventure|Children|Fantasy  |
+| City of Lost Children, The... | Adventure|Drama|Fantasy|My... |
+| Twelve Monkeys (a.k.a. 12 ... |    Mystery|Sci-Fi|Thriller    |
+|  Seven (a.k.a. Se7en) (1995)  |        Mystery|Thriller       |
+|   Usual Suspects, The (1995)  |     Crime|Mystery|Thriller    |
+| Rumble in the Bronx (Hont ... | Action|Adventure|Comedy|Crime |
+|         Rob Roy (1995)        |    Action|Drama|Romance|War   |
+|         Clerks (1994)         |             Comedy            |
+| Interview with the Vampire... |          Drama|Horror         |
+| Star Wars: Episode IV - A ... |    Action|Adventure|Sci-Fi    |
++-------------------------------+-------------------------------+
+[10 rows x 7 columns]
+
+## End of load and merge
+
+>>> train, test = tc.recommender.util.random_split_by_user(data, 'userId', 'title')
+>>> train.shape
+(19970212, 7)
+>>> train
+Columns:
+        X1      int
+        userId  int
+        movieId int
+        rating  float
+        timestamp       str
+        title   str
+        genres  str
+
+Rows: 19970212
+
+Data:
++----+--------+---------+--------+---------------------+
+| X1 | userId | movieId | rating |      timestamp      |
++----+--------+---------+--------+---------------------+
+| 0  |   1    |    2    |  3.5   | 2005-04-02 23:53:47 |
+| 1  |   1    |    29   |  3.5   | 2005-04-02 23:31:16 |
+| 2  |   1    |    32   |  3.5   | 2005-04-02 23:33:39 |
+| 3  |   1    |    47   |  3.5   | 2005-04-02 23:32:07 |
+| 4  |   1    |    50   |  3.5   | 2005-04-02 23:29:40 |
+| 5  |   1    |   112   |  3.5   | 2004-09-10 03:09:00 |
+| 6  |   1    |   151   |  4.0   | 2004-09-10 03:08:54 |
+| 7  |   1    |   223   |  4.0   | 2005-04-02 23:46:13 |
+| 8  |   1    |   253   |  4.0   | 2005-04-02 23:35:40 |
+| 9  |   1    |   260   |  4.0   | 2005-04-02 23:33:46 |
++----+--------+---------+--------+---------------------+
++-------------------------------+-------------------------------+
+|             title             |             genres            |
++-------------------------------+-------------------------------+
+|         Jumanji (1995)        |   Adventure|Children|Fantasy  |
+| City of Lost Children, The... | Adventure|Drama|Fantasy|My... |
+| Twelve Monkeys (a.k.a. 12 ... |    Mystery|Sci-Fi|Thriller    |
+|  Seven (a.k.a. Se7en) (1995)  |        Mystery|Thriller       |
+|   Usual Suspects, The (1995)  |     Crime|Mystery|Thriller    |
+| Rumble in the Bronx (Hont ... | Action|Adventure|Comedy|Crime |
+|         Rob Roy (1995)        |    Action|Drama|Romance|War   |
+|         Clerks (1994)         |             Comedy            |
+| Interview with the Vampire... |          Drama|Horror         |
+| Star Wars: Episode IV - A ... |    Action|Adventure|Sci-Fi    |
++-------------------------------+-------------------------------+
+[19970212 rows x 7 columns]
+Note: Only the head of the SFrame is printed.
+You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns.
+>>> test.shape
+(30051, 7)
+>>> train.shape
+(19970212, 7)
+>>> data.shape
+(20000263, 7)
+
+## Train model 
+
+>>> model = tc.recommender.create(train, 'userId', 'title', target='rating')
+Preparing data set.
+    Data has 19970212 observations with 138493 users and 26642 items.
+    Data prepared in: 33.3659s
+Training ranking_factorization_recommender for recommendations.
++--------------------------------+--------------------------------------------------+----------+
+| Parameter                      | Description                                      | Value    |
++--------------------------------+--------------------------------------------------+----------+
+| num_factors                    | Factor Dimension                                 | 32       |
+| regularization                 | L2 Regularization on Factors                     | 1e-09    |
+| solver                         | Solver used for training                         | adagrad  |
+| linear_regularization          | L2 Regularization on Linear Coefficients         | 1e-09    |
+| ranking_regularization         | Rank-based Regularization Weight                 | 0.25     |
+| max_iterations                 | Maximum Number of Iterations                     | 25       |
++--------------------------------+--------------------------------------------------+----------+
+Killed
